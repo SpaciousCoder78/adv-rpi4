@@ -1,0 +1,12 @@
+blinker==1.9.0
+click==8.1.8
+Flask==3.1.0
+imutils==0.5.4
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+numpy==2.2.4
+opencv-python==4.11.0.86
+paho-mqtt==2.1.0
+RPi.GPIO==0.7.1
+Werkzeug==3.1.3
