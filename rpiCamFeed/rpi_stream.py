@@ -12,6 +12,8 @@ picam.start()
 def generate_frames():
     while True:
         frame = picam.capture_array()
+        # Convert BGR (default) to RGB to fix inverted colors.
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
