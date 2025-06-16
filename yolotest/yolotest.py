@@ -1,5 +1,8 @@
 import cv2
 
+from l298n import *
+# import pytesseract
+
 from yolov8 import YOLOv8
 
 # Initialize the webcam
@@ -25,6 +28,7 @@ while cap.isOpened():
     combined_img = yolov8_detector.draw_detections(frame)
     cv2.imshow("Detected Objects", combined_img)
 
+    controlspeed(class_ids)
     # Press key q to stop
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
