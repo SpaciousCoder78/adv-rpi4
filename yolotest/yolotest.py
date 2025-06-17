@@ -78,7 +78,7 @@ outer_run = True
 while outer_run:
     # Initialize the camera and YOLOv8 detector for each run.
     cap = cv2.VideoCapture(0)
-    model_path = "model.onnx"
+    model_path = "best.onnx"
     yolov8_detector = YOLOv8(model_path, conf_thres=0.5, iou_thres=0.5)
     
     cv2.namedWindow("Detected Objects", cv2.WINDOW_NORMAL)
