@@ -24,7 +24,8 @@ pA.start(0)
 pB.start(0)
 
 # === Motor Logic ===
-current_speed = 20
+DEFAULT_SPEED = 20
+current_speed = DEFAULT_SPEED  # Ensure it starts at default
 current_action = 'Forward'
 lock = Lock()
 
@@ -60,8 +61,14 @@ def update_action(predicted_label):
             stop_motors()
         elif predicted_label == 'Green Light':
             if current_action == 'Stop':
+                current_speed = DEFAULT_SPEED  # Reset to default on green light
                 current_action = 'Forward'
                 set_motors(current_speed)
+        elif predicted_label is None:
+                set_motors(20)
+
+# === Start at default speed ===
+set_motors(DEFAULT_SPEED)
 
 # === Polling Loop ===
 last_seen = None
@@ -84,6 +91,9 @@ try:
                             print(f"[MOTOR] Unknown class_id: {class_id}")
                     except ValueError:
                         print(f"[MOTOR] Non-integer class_id received: {class_id}")
+                elif class_id is None:
+                    print("class id is none")
+                    update_action(None)
             else:
                 print("[MOTOR] Failed to get class_id")
         except Exception as e:
@@ -93,4 +103,6 @@ try:
 
 except KeyboardInterrupt:
     print("[MOTOR] Interrupted. Cleaning up...")
+    current_speed = DEFAULT_SPEED
+    print(f"[MOTOR] Speed reset to default: {DEFAULT_SPEED}")
     GPIO.cleanup()

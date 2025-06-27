@@ -54,7 +54,14 @@ while cap.isOpened():
                     )
                 except requests.exceptions.RequestException as e:
                     print(f"Error sending detection: {e}")
-
+        else:
+            try:
+                response = requests.post(
+                    "http://10.42.0.114:5000/receive_detection",
+                    json={"class_id": None}
+                )
+            except requests.exceptions.RequestException as e:
+                print(f"Error sending detection: {e}")
         cv2.imshow("Detected Objects", combined_img)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
