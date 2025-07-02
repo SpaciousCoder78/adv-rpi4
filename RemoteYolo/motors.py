@@ -49,10 +49,17 @@ def update_action(predicted_label):
         if 'Speed Limit' in predicted_label:
             try:
                 speed_val = int(predicted_label.split()[-1])
-                pwm = max(10, min((speed_val / 120) * 100, 100))
-                current_speed = int(pwm)
+                target_pwm = max(10, min((speed_val / 120) * 100, 100))
+                
+                # Gradually increase PWM from current_speed to target_pwm
+                step = 1 if target_pwm > current_speed else -1
+                for pwm in range(current_speed, int(target_pwm) + step, step):
+                    current_speed = pwm
+                    set_motors(current_speed)
+                    time.sleep(0.1)  # Small delay between increments
+                
+                current_speed = int(target_pwm)
                 current_action = 'Forward'
-                set_motors(current_speed)
             except ValueError:
                 print(f"[MOTOR] Couldn't parse speed from label: {predicted_label}")
         elif predicted_label in ['Stop', 'Red Light']:
@@ -61,11 +68,11 @@ def update_action(predicted_label):
             stop_motors()
         elif predicted_label == 'Green Light':
             if current_action == 'Stop':
-                current_speed = DEFAULT_SPEED  # Reset to default on green light
+                current_speed = DEFAULT_SPEED
                 current_action = 'Forward'
                 set_motors(current_speed)
         elif predicted_label is None:
-                set_motors(20)
+            set_motors(20)
 
 # === Start at default speed ===
 set_motors(DEFAULT_SPEED)
